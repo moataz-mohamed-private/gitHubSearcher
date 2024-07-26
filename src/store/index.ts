@@ -12,6 +12,7 @@ import { Repos } from "@/types/repos";
 import { Users } from "@/types/users";
 import { filterType } from "@/types/common";
 import { getRepos, getUsers } from "@/api/githubApi";
+import { PersistPartial } from "redux-persist/es/persistReducer";
 
 interface gitHubSearchState {
   searchQuery: string;
@@ -49,6 +50,9 @@ export const gitHubSearchSlice = createSlice({
     searchResultUpdated: (state, action: PayloadAction<Repos | Users>) => {
       state.searchResult = action.payload;
     },
+    cachedDataUpdated: (state, action: PayloadAction<Repos | Users>) => {
+      state.cachedResults = addAndRemoveFromCache(state, action.payload);
+    },
   },
 });
 
@@ -59,6 +63,7 @@ export const {
   filterTypeUpdated,
   searchResultUpdated,
   searchReset,
+  cachedDataUpdated,
 } = gitHubSearchSlice.actions;
 
 const listenerMiddleware = createListenerMiddleware();
@@ -89,6 +94,8 @@ export const useSearchQuery = () =>
   useAppSelector((state) => state.gitHubSearch.searchQuery);
 export const useSearchResult = () =>
   useAppSelector((state) => state.gitHubSearch.searchResult);
+export const useCachedResult = () =>
+  useAppSelector((state) => state.gitHubSearch.cachedResults);
 
 listenerMiddleware.startListening.withTypes<RootState, AppDispatch>()({
   predicate: (_action, currentState, previousState) => {
@@ -104,21 +111,84 @@ listenerMiddleware.startListening.withTypes<RootState, AppDispatch>()({
     listenerApi.cancelActiveListeners();
     await listenerApi.delay(500);
 
-    const data = await fetchOrRetriveData(listenerApi.getState() as any);
-    listenerApi.dispatch(searchResultUpdated(data));
+    let data;
+    if (isCached(listenerApi.getState())) {
+      data = retriveFromCache(listenerApi.getState());
+    } else {
+      data = await fetchData(listenerApi.getState());
+      if (data) listenerApi.dispatch(cachedDataUpdated(data));
+    }
+
+    if (data) listenerApi.dispatch(searchResultUpdated(data));
   },
 });
 
-const fetchOrRetriveData = async (state: gitHubSearchState) => {
-  let resp;
-  if (state.cachedResults[state.filterType][state.searchQuery]) {
-    return state.cachedResults[state.filterType][state.searchQuery];
+type presistedStateListner = {
+  gitHubSearch: gitHubSearchState;
+} & PersistPartial;
+
+const isCached = (state: presistedStateListner) => {
+  const gitHubSearchState = state.gitHubSearch;
+  if (
+    gitHubSearchState.cachedResults[gitHubSearchState.filterType][
+      gitHubSearchState.searchQuery
+    ]
+  ) {
+    return true;
   }
-  if (state.filterType === "repo") {
-    resp = await getRepos(state.searchQuery);
+  return false;
+};
+
+const retriveFromCache = (state: presistedStateListner) => {
+  const gitHubSearchState = state.gitHubSearch;
+  return gitHubSearchState.cachedResults[gitHubSearchState.filterType][
+    gitHubSearchState.searchQuery
+  ];
+};
+
+const fetchData = async (state: presistedStateListner) => {
+  const gitHubSearchState = state.gitHubSearch;
+  let resp;
+  if (gitHubSearchState.filterType === "repo") {
+    resp = await getRepos(gitHubSearchState.searchQuery);
     return resp.data;
-  } else if (state.filterType === "user") {
-    resp = await getUsers(state.searchQuery);
+  } else if (gitHubSearchState.filterType === "user") {
+    resp = await getUsers(gitHubSearchState.searchQuery);
     return resp.data;
   }
 };
+
+const addAndRemoveFromCache = (
+  state: gitHubSearchState,
+  newData: Repos | Users
+) => {
+  const cacheMaxSize = 10;
+  const cachedFilterState = state.cachedResults[state.filterType];
+  const cachedQueryKeys = Object.keys(cachedFilterState);
+
+  if (cachedQueryKeys.length > cacheMaxSize) {
+    delete cachedFilterState[cachedQueryKeys[0]];
+  }
+  cachedFilterState[state.searchQuery] = newData;
+  return {
+    [state.filterType]: cachedFilterState,
+    ...state.cachedResults,
+  };
+};
+
+const cacheFetchedData = (state: presistedStateListner) => {
+  const gitHubSearchState = state.gitHubSearch;
+};
+// const fetchOrRetriveData = async (state: gitHubSearchState) => {
+//   let resp;
+//   if (state.cachedResults[state.filterType][state.searchQuery]) {
+//     return state.cachedResults[state.filterType][state.searchQuery];
+//   }
+//   if (state.filterType === "repo") {
+//     resp = await getRepos(state.searchQuery);
+//     return resp.data;
+//   } else if (state.filterType === "user") {
+//     resp = await getUsers(state.searchQuery);
+//     return resp.data;
+//   }
+// };
