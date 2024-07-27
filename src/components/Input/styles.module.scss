@@ -1,20 +1,18 @@
-.input {
-  display: block;
-}
-
-.input label {
-  font-weight: bold;
-}
+@import "@radix-ui/colors/mauve.css";
+@import "@radix-ui/colors/black-alpha.css";
+@import "@radix-ui/colors/gray.css";
 
 .input input {
-  width: 400px;
-  padding: 10px;
+  width: 450px;
   margin: 10px;
-  border-radius: 10px;
-  border: 1px solid #eee;
+  padding: 10px;
+  border: 1px solid var(--gray-5);
   transition: 0.3s border-color;
-}
-
-.input input:hover {
-  border: 1px solid #aaa;
+  &:hover {
+    border: 1px solid var(--black-a7);
+  }
+  &:focus {
+    border: 2px solid black;
+    outline: none;
+  }
 }

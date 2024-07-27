@@ -1,0 +1,19 @@
+.chipContainer {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+.chip {
+  background-color: #ccc;
+  padding: 2px 8px 2px 8px;
+  margin: 0px 6px;
+  border-radius: 16px;
+  color: black;
+  align-items: center;
+  gap: 6px;
+  display: flex;
+  cursor: pointer;
+  border: none;
+  box-shadow: 0 2px 10px var(--black-a7);
+  font-family: Cera Pro Medium;
+}

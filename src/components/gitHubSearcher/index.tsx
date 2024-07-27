@@ -1,12 +1,4 @@
 import { Input } from "@/components/Input";
-// import {
-//   searchQueryUpdated,
-//   useSearchQuery,
-//   filterTypeUpdated,
-//   useSearchResult,
-//   useCachedResult,
-//   useFilterType,
-// } from "@/store";
 import { useDispatch } from "react-redux";
 import { FC, useEffect } from "react";
 import { Option, filterType } from "@/types/common";
@@ -14,15 +6,19 @@ import { SelectDropdown } from "@/components/selectDropdown";
 import {
   useCachedResult,
   useFilterType,
+  useSearchQuery,
   useSearchResult,
 } from "@/store/gitHubSearch/gitHubSearch.selectors";
 import {
   filterTypeUpdated,
   searchQueryUpdated,
 } from "@/store/gitHubSearch/gitHubSearch.reducer";
-import { GitHubSearchFilters } from "@/components/gitHubSearcher";
-export const HomePage: FC = () => {
+import classes from "./styles.module.scss";
+import Chips from "../chips";
+
+export const GitHubSearchFilters: FC = () => {
   const dispatch = useDispatch();
+  const searchQuery = useSearchQuery();
   const searcResult = useSearchResult();
   const cachedData = useCachedResult();
   const filterType = useFilterType();
@@ -31,17 +27,20 @@ export const HomePage: FC = () => {
     { value: "repos", label: "Repositories" },
   ];
 
-  useEffect(() => {
-    console.log(cachedData);
-  }, []);
+  const checkSearchHistory = (): string => {
+    if (Object.keys(cachedData?.[filterType]).length > 0)
+      return "Your Lastest Searches:";
+    return "There Is No Search History";
+  };
+
   return (
     <section>
-      <GitHubSearchFilters />
-      {/* <div>
+      <div className={classes.filters}>
         <Input
           placeholder="type to start searching..."
           onChange={(e) => dispatch(searchQueryUpdated(e.target.value))}
           type={"string"}
+          value={searchQuery}
         />
         <SelectDropdown
           options={options}
@@ -51,16 +50,18 @@ export const HomePage: FC = () => {
           defaultValue="repos"
         />
       </div>
+      <div className={classes.filters}>
+        <small>{checkSearchHistory()}</small>
+        <Chips
+          options={Object.keys(cachedData?.[filterType]) || []}
+          onClick={(option) => dispatch(searchQueryUpdated(option))}
+        />
+      </div>
       <div>
         {searcResult?.items?.map((item) => (
           <span style={{ margin: "5px" }}>{item.url}</span>
         ))}
       </div>
-      <div>
-        {Object.keys(cachedData?.[filterType])?.map((item) => (
-          <span style={{ margin: "5px" }}>{item}</span>
-        ))}
-      </div> */}
     </section>
   );
 };

@@ -1,53 +1,36 @@
 import { getRepos, getUsers } from "@/api/githubApi";
 import { gitHubSearchState } from "./gitHubSearch.reducer";
-import { PersistPartial } from "redux-persist/es/persistReducer";
 import { Repos } from "@/types/repos";
 import { Users } from "@/types/users";
 
-type presistedStateListner = {
-  gitHubSearch: gitHubSearchState;
-} & PersistPartial;
-
-export const shouldStartFetching = (
-  currentState: presistedStateListner,
-  previousState: presistedStateListner
+export const shouldStartListining = (
+  currentState: gitHubSearchState,
+  previousState: gitHubSearchState
 ) => {
   return (
-    currentState.gitHubSearch.searchQuery !==
-      previousState.gitHubSearch.searchQuery ||
-    (currentState.gitHubSearch.filterType !==
-      previousState.gitHubSearch.filterType &&
-      currentState.gitHubSearch.searchQuery.length > 3)
+    currentState.searchQuery !== previousState.searchQuery ||
+    currentState.filterType !== previousState.filterType
   );
 };
 
-export const isCached = (state: presistedStateListner) => {
-  const gitHubSearchState = state.gitHubSearch;
-  if (
-    gitHubSearchState.cachedResults[gitHubSearchState.filterType][
-      gitHubSearchState.searchQuery
-    ]
-  ) {
+export const isCached = (state: gitHubSearchState) => {
+  if (state.cachedResults[state.filterType][state.searchQuery]) {
     return true;
   }
   return false;
 };
 
-export const retriveFromCache = (state: presistedStateListner) => {
-  const gitHubSearchState = state.gitHubSearch;
-  return gitHubSearchState.cachedResults[gitHubSearchState.filterType][
-    gitHubSearchState.searchQuery
-  ];
+export const retriveFromCache = (state: gitHubSearchState) => {
+  return state.cachedResults[state.filterType][state.searchQuery];
 };
 
-export const fetchData = async (state: presistedStateListner) => {
-  const gitHubSearchState = state.gitHubSearch;
+export const fetchData = async (state: gitHubSearchState) => {
   let resp;
-  if (gitHubSearchState.filterType === "repos") {
-    resp = await getRepos(gitHubSearchState.searchQuery);
+  if (state.filterType === "repos") {
+    resp = await getRepos(state.searchQuery);
     return resp.data;
-  } else if (gitHubSearchState.filterType === "users") {
-    resp = await getUsers(gitHubSearchState.searchQuery);
+  } else if (state.filterType === "users") {
+    resp = await getUsers(state.searchQuery);
     return resp.data;
   }
 };
