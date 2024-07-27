@@ -1,16 +1,25 @@
 import { Input } from "@/components/Input";
-import {
-  searchQueryUpdated,
-  useSearchQuery,
-  filterTypeUpdated,
-  useSearchResult,
-  useCachedResult,
-  useFilterType,
-} from "@/store";
+// import {
+//   searchQueryUpdated,
+//   useSearchQuery,
+//   filterTypeUpdated,
+//   useSearchResult,
+//   useCachedResult,
+//   useFilterType,
+// } from "@/store";
 import { useDispatch } from "react-redux";
 import { FC, useEffect } from "react";
 import { Option, filterType } from "@/types/common";
 import { SelectDropdown } from "@/components/selectDropdown";
+import {
+  useCachedResult,
+  useFilterType,
+  useSearchResult,
+} from "@/store/gitHubSearch/gitHubSearch.selectors";
+import {
+  filterTypeUpdated,
+  searchQueryUpdated,
+} from "@/store/gitHubSearch/gitHubSearch.reducer";
 export const HomePage: FC = () => {
   const dispatch = useDispatch();
   const searcResult = useSearchResult();
