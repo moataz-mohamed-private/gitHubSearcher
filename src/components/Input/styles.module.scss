@@ -3,13 +3,13 @@
 @import "@radix-ui/colors/gray.css";
 
 .input input {
-  width: 450px;
-  margin: 10px;
-  padding: 10px;
+  width: 350px;
+  margin-right: 10px;
+  padding: 10px 5px;
   border: 1px solid var(--gray-5);
   transition: 0.3s border-color;
   &:hover {
-    border: 1px solid var(--black-a7);
+    border: 1.5px solid var(--black-a7);
   }
   &:focus {
     border: 2px solid black;

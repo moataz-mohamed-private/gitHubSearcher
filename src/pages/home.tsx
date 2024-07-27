@@ -20,7 +20,7 @@ import {
   filterTypeUpdated,
   searchQueryUpdated,
 } from "@/store/gitHubSearch/gitHubSearch.reducer";
-import { GitHubSearchFilters } from "@/components/gitHubSearcher";
+import { SearchFilters } from "@/components/searcherFilters";
 export const HomePage: FC = () => {
   const dispatch = useDispatch();
   const searcResult = useSearchResult();
@@ -36,7 +36,7 @@ export const HomePage: FC = () => {
   }, []);
   return (
     <section>
-      <GitHubSearchFilters />
+      <SearchFilters />
       {/* <div>
         <Input
           placeholder="type to start searching..."

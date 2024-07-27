@@ -1,0 +1,11 @@
+.filtersContainer {
+  display: flex;
+  flex-direction: column;
+  justify-content: start;
+  align-items: start;
+}
+.filters {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}

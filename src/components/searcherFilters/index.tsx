@@ -16,7 +16,7 @@ import {
 import classes from "./styles.module.scss";
 import Chips from "../chips";
 
-export const GitHubSearchFilters: FC = () => {
+export const SearchFilters: FC = () => {
   const dispatch = useDispatch();
   const searchQuery = useSearchQuery();
   const searcResult = useSearchResult();
@@ -34,7 +34,7 @@ export const GitHubSearchFilters: FC = () => {
   };
 
   return (
-    <section>
+    <section className={classes.filtersContainer}>
       <div className={classes.filters}>
         <Input
           placeholder="type to start searching..."
@@ -50,17 +50,12 @@ export const GitHubSearchFilters: FC = () => {
           defaultValue="repos"
         />
       </div>
-      <div className={classes.filters}>
+      <div>
         <small>{checkSearchHistory()}</small>
         <Chips
           options={Object.keys(cachedData?.[filterType]) || []}
           onClick={(option) => dispatch(searchQueryUpdated(option))}
         />
-      </div>
-      <div>
-        {searcResult?.items?.map((item) => (
-          <span style={{ margin: "5px" }}>{item.url}</span>
-        ))}
       </div>
     </section>
   );

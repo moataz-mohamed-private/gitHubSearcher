@@ -18,11 +18,11 @@ button {
   height: 35px;
   gap: 5px;
   background-color: white;
-  color: var(--violet-11);
-  box-shadow: 0 2px 10px var(--black-a7);
+  color: var(--black-a12);
+  box-shadow: 0 2px 10px var(--black-a10);
 }
 .SelectTrigger:hover {
-  background-color: var(--mauve-3);
+  border: 1px solid var(--black-a7);
 }
 .SelectTrigger:focus {
   box-shadow: 0 0 0 2px black;
@@ -32,7 +32,7 @@ button {
 }
 
 .SelectIcon {
-  color: Var(--violet-11);
+  color: Var(--black-a12);
 }
 
 .SelectContent {
@@ -51,7 +51,7 @@ button {
 .SelectItem {
   font-size: 13px;
   line-height: 1;
-  color: var(--violet-11);
+  color: var(--black-a7);
   border-radius: 3px;
   display: flex;
   align-items: center;
@@ -66,8 +66,8 @@ button {
 }
 .SelectItem[data-highlighted] {
   outline: none;
-  background-color: var(--violet-9);
-  color: var(--violet-1);
+  background-color: var(--black-a7);
+  color: white;
 }
 
 .SelectLabel {
