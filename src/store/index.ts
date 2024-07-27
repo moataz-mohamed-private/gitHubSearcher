@@ -5,7 +5,7 @@ import {
 } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
 import { combineReducers } from "redux";
-import { persistReducer } from "redux-persist";
+import { persistReducer, persistStore } from "redux-persist";
 import storage from "redux-persist/lib/storage";
 import { useDispatch, useSelector } from "react-redux";
 import { Repos } from "@/types/repos";
@@ -13,24 +13,25 @@ import { Users } from "@/types/users";
 import { filterType } from "@/types/common";
 import { getRepos, getUsers } from "@/api/githubApi";
 import { PersistPartial } from "redux-persist/es/persistReducer";
+import { getPersistConfig } from "redux-deep-persist";
 
 interface gitHubSearchState {
   searchQuery: string;
   searchResult: Repos | Users;
   filterType: filterType;
   cachedResults: {
-    repo: { [key: string]: Repos };
-    user: { [key: string]: Users };
+    repos: { [key: string]: Repos };
+    users: { [key: string]: Users };
   };
 }
 
 const initialState: gitHubSearchState = {
   searchQuery: "",
   searchResult: {} as Repos,
-  filterType: "repo",
+  filterType: "repos",
   cachedResults: {
-    repo: {},
-    user: {},
+    repos: {},
+    users: {},
   },
 };
 
@@ -68,21 +69,27 @@ export const {
 
 const listenerMiddleware = createListenerMiddleware();
 
+const config = getPersistConfig({
+  key: "root",
+  storage,
+  whitelist: ["gitHubSearch.cachedResults"],
+  rootReducer: combineReducers({ gitHubSearch: gitHubSearchSliceReducer }),
+}) as any;
+
 const persistedReducer = persistReducer(
-  {
-    key: "root",
-    storage,
-    whitelist: ["cachedResults"],
-  },
+  config,
   combineReducers({ gitHubSearch: gitHubSearchSliceReducer })
 );
-
 export const store = configureStore({
   reducer: persistedReducer,
 
   middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware().prepend(listenerMiddleware.middleware),
+    getDefaultMiddleware({ serializableCheck: false }).prepend(
+      listenerMiddleware.middleware
+    ),
 });
+
+export const persistor = persistStore(store);
 
 export type RootState = ReturnType<typeof store.getState>;
 export type AppDispatch = typeof store.dispatch;
@@ -94,6 +101,8 @@ export const useSearchQuery = () =>
   useAppSelector((state) => state.gitHubSearch.searchQuery);
 export const useSearchResult = () =>
   useAppSelector((state) => state.gitHubSearch.searchResult);
+export const useFilterType = () =>
+  useAppSelector((state) => state.gitHubSearch.filterType);
 export const useCachedResult = () =>
   useAppSelector((state) => state.gitHubSearch.cachedResults);
 
@@ -149,10 +158,10 @@ const retriveFromCache = (state: presistedStateListner) => {
 const fetchData = async (state: presistedStateListner) => {
   const gitHubSearchState = state.gitHubSearch;
   let resp;
-  if (gitHubSearchState.filterType === "repo") {
+  if (gitHubSearchState.filterType === "repos") {
     resp = await getRepos(gitHubSearchState.searchQuery);
     return resp.data;
-  } else if (gitHubSearchState.filterType === "user") {
+  } else if (gitHubSearchState.filterType === "users") {
     resp = await getUsers(gitHubSearchState.searchQuery);
     return resp.data;
   }
