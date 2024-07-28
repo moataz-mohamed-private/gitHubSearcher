@@ -3,18 +3,34 @@ img {
   display: block;
 }
 
-.cardList {
-  width: 90%;
-  max-width: 400px;
+.repoCard {
+  //   width: 90%;
+  height: 300px;
+  width: 400px;
+  cursor: pointer;
 }
 
+.userCard {
+  height: 400px;
+  width: 400px;
+  cursor: pointer;
+}
+.name {
+  text-overflow: ellipsis;
+  font-weight: bolder;
+  max-width: 80%;
+  overflow: auto;
+}
 .card {
+  height: 75%;
+  width: 100%;
   background-color: #fff;
+  text-decoration: none;
   box-shadow:
     0 0 0 1px rgba(#000, 0.05),
     0 20px 50px 0 rgba(#000, 0.1);
   border-radius: 15px;
-  overflow: hidden;
+  //   overflow: con;
   padding: 1.25rem;
   position: relative;
   transition: 0.15s ease-in;
@@ -27,10 +43,19 @@ img {
     transform: translatey(-5px);
   }
 }
-
+.description {
+  height: 30%;
+  overflow: scroll;
+}
 .cardImage {
-  border-radius: 10px;
   overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  img {
+    border-radius: 50%;
+    width: 150px;
+  }
 }
 
 .cardHeader {
@@ -38,23 +63,6 @@ img {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  a {
-    font-weight: 600;
-    font-size: 1.375rem;
-    line-height: 1.25;
-    padding-right: 1rem;
-    text-decoration: none;
-    color: inherit;
-    will-change: transform;
-    &:after {
-      content: "";
-      position: absolute;
-      left: 0;
-      top: 0;
-      right: 0;
-      bottom: 0;
-    }
-  }
 }
 
 .iconButton {
@@ -80,11 +88,10 @@ img {
     width: 1em;
     height: 1em;
   }
-  &:hover,
-  &:focus {
-    background-color: #ec4646;
-    color: #fff;
-  }
+}
+
+.StarsCount {
+  margin-top: 10px;
 }
 
 .cardFooter {
@@ -93,6 +100,7 @@ img {
   padding-top: 1.25rem;
   display: flex;
   align-items: center;
+  justify-content: space-around;
   flex-wrap: wrap;
 }
 
@@ -100,16 +108,7 @@ img {
   display: flex;
   align-items: center;
   color: #787878;
-  &:first-child:after {
-    display: block;
-    content: "";
-    width: 4px;
-    height: 4px;
-    border-radius: 50%;
-    background-color: currentcolor;
-    margin-left: 0.75rem;
-    margin-right: 0.75rem;
-  }
+
   svg {
     flex-shrink: 0;
     width: 1em;
