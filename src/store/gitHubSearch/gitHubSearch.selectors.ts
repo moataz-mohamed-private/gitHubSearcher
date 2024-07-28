@@ -8,3 +8,5 @@ export const useFilterType = () =>
   useAppSelector((state) => state.gitHubSearch.filterType);
 export const useCachedResult = () =>
   useAppSelector((state) => state.gitHubSearch.cachedResults);
+export const useIsLoading = () =>
+  useAppSelector((state) => state.gitHubSearch.isLoading);

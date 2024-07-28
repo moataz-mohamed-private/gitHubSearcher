@@ -1,7 +1,4 @@
 import { FC } from "react";
-// import { FaStar, FaCircle } from "react-icons/fa";
-// import { BiGitRepoForked } from "react-icons/bi";
-// import { BsEye } from "react-icons/bs";
 import {
   StarIcon,
   EyeOpenIcon,
@@ -9,11 +6,8 @@ import {
   CodeIcon,
   PersonIcon,
 } from "@radix-ui/react-icons";
-import { BiGitRepoForked } from "@radix-ui/react-icons/bi";
-import { BsEye } from "@radix-ui/react-icons/bs";
 import { RepoItem } from "@/types/repos";
 import classes from "../styles.module.scss";
-import { Link } from "react-router-dom";
 
 type CardProps = {
   item: RepoItem;
@@ -54,7 +48,7 @@ export const RepoCard: FC<CardProps> = ({ item }) => {
           </div>
           <div className={classes.cardMeta}>
             <PersonIcon />
-            {item.owner.login}
+            {item.owner?.login}
           </div>
         </div>
       </article>

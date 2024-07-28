@@ -4,6 +4,7 @@ import {
   cachedDataUpdated,
   searchResultUpdated,
   resetSearchResult,
+  isLoadingUpdated,
 } from "./gitHubSearch.reducer";
 import {
   fetchData,
@@ -32,8 +33,10 @@ export const listenToGitHubSearch = () => {
         if (isCached(gitHubSearchState)) {
           data = retriveFromCache(gitHubSearchState);
         } else {
+          listenerApi.dispatch(isLoadingUpdated(true));
           data = await fetchData(gitHubSearchState);
           if (data) listenerApi.dispatch(cachedDataUpdated(data));
+          listenerApi.dispatch(isLoadingUpdated(false));
         }
 
         if (data) listenerApi.dispatch(searchResultUpdated(data));

@@ -7,6 +7,7 @@ import { addAndRemoveFromCache } from "./gitHubSearch.utils";
 
 export interface gitHubSearchState {
   searchQuery: string;
+  isLoading: boolean;
   searchResult: Repos | Users;
   filterType: filterType;
   cachedResults: {
@@ -17,6 +18,7 @@ export interface gitHubSearchState {
 
 const initialState: gitHubSearchState = {
   searchQuery: "",
+  isLoading: false,
   searchResult: {} as Repos | Users,
   filterType: "repos",
   cachedResults: {
@@ -44,6 +46,9 @@ export const gitHubSearchSlice = createSlice({
     searchResultUpdated: (state, action: PayloadAction<Repos | Users>) => {
       state.searchResult = action.payload;
     },
+    isLoadingUpdated: (state, action: PayloadAction<boolean>) => {
+      state.isLoading = action.payload;
+    },
     cachedDataUpdated: (state, action: PayloadAction<Repos | Users>) => {
       state.cachedResults = addAndRemoveFromCache(state, action.payload);
     },
@@ -54,6 +59,7 @@ export const {
   searchQueryUpdated,
   filterTypeUpdated,
   searchResultUpdated,
+  isLoadingUpdated,
   searchReset,
   cachedDataUpdated,
   resetSearchResult,

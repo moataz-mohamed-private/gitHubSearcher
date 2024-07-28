@@ -1,15 +1,5 @@
 import { FC } from "react";
-import { FaStar, FaCircle } from "@radix-ui/react-icons/fa";
-import { BiGitRepoForked } from "@radix-ui/react-icons/bi";
-import { BsEye } from "@radix-ui/react-icons/bs";
-import { RepoItem } from "@/types/repos";
-import {
-  StarIcon,
-  EyeOpenIcon,
-  CommitIcon,
-  CodeIcon,
-  PersonIcon,
-} from "@radix-ui/react-icons";
+import { EyeOpenIcon } from "@radix-ui/react-icons";
 import { UserItem } from "@/types/users";
 import classes from "../styles.module.scss";
 

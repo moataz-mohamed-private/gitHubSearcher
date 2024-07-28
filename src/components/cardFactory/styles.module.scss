@@ -4,15 +4,12 @@ img {
 }
 
 .repoCard {
-  //   width: 90%;
   height: 300px;
-  //   width: 400px;
   cursor: pointer;
 }
 
 .userCard {
   height: 400px;
-  //   width: 400px;
   cursor: pointer;
 }
 .name {
@@ -29,7 +26,6 @@ img {
 }
 .card {
   height: 75%;
-  //   width: 100%;
   background-color: #fff;
   text-decoration: none;
   box-shadow:
@@ -120,5 +116,11 @@ img {
     width: 1em;
     height: 1em;
     margin-right: 0.25em;
+  }
+}
+
+@media only screen and (max-width: 768px) {
+  .cardMeta:nth-of-type(4) {
+    display: none;
   }
 }
