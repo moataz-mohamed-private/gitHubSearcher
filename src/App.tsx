@@ -11,7 +11,7 @@ import { PersistGate } from "redux-persist/integration/react";
 // import { store } from "./store";
 import { persistor, store } from "./store";
 import { Provider } from "react-redux";
-import { HomePage } from "./pages/home";
+import { HomePage } from "./pages/home/home";
 import { SelectDropdown } from "./components/selectDropdown";
 
 const routes = [{ path: "/home", element: <HomePage />, exact: true }];

@@ -9,7 +9,7 @@
 .chip {
   background-color: var(--black-a1);
   padding: 3px 9px;
-  margin: 0px 6px;
+  margin: 4px 6px;
   border-radius: 16px;
   color: black;
   align-items: center;
@@ -24,4 +24,10 @@
     background-color: var(--black-a8);
     color: white;
   }
+}
+
+small {
+  display: block;
+  color: var(--black-a7);
+  margin-top: 5px;
 }

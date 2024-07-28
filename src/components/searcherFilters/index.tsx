@@ -29,8 +29,8 @@ export const SearchFilters: FC = () => {
 
   const checkSearchHistory = (): string => {
     if (Object.keys(cachedData?.[filterType]).length > 0)
-      return "Your Lastest Searches:";
-    return "There Is No Search History";
+      return "Lastest Searches:";
+    return "No Search History";
   };
 
   return (
@@ -51,8 +51,8 @@ export const SearchFilters: FC = () => {
         />
       </div>
       <div>
-        <small>{checkSearchHistory()}</small>
         <Chips
+          placeholder={checkSearchHistory()}
           options={Object.keys(cachedData?.[filterType]) || []}
           onClick={(option) => dispatch(searchQueryUpdated(option))}
         />

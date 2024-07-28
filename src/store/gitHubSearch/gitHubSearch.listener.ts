@@ -22,7 +22,7 @@ export const listenToGitHubSearch = () => {
     },
     effect: async (_action, listenerApi) => {
       listenerApi.cancelActiveListeners();
-      await listenerApi.delay(500);
+      await listenerApi.delay(700);
 
       const gitHubSearchState = listenerApi.getState().gitHubSearch;
       if (gitHubSearchState.searchQuery.length < 3) {

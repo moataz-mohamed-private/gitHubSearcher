@@ -1,0 +1,12 @@
+@import "@radix-ui/colors/black-alpha.css";
+.header {
+  display: flex;
+  align-items: center;
+  margin: 10px 0px;
+  .headerInfo {
+    padding-left: 15px;
+    p {
+      color: var(--black-a7);
+    }
+  }
+}

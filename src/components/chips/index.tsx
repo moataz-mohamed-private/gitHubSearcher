@@ -1,23 +1,27 @@
 import { FC } from "react";
 import classes from "./styles.module.scss";
 
-export type chipsProps = {
+export type ChipsProps = {
+  placeholder?: string;
   options: string[];
   onClick: (value: string) => void;
 };
 
-const Chips: FC<chipsProps> = ({ options, onClick }) => {
+const Chips: FC<ChipsProps> = ({ options, onClick, placeholder }) => {
   return (
-    <div className={classes.chipContainer}>
-      {options.map((option) => (
-        <button
-          onClick={() => onClick(option)}
-          className={classes.chip}
-          type="button"
-        >
-          {option}
-        </button>
-      ))}
+    <div>
+      <small>{placeholder}</small>
+      <div className={classes.chipContainer}>
+        {options.map((option) => (
+          <button
+            onClick={() => onClick(option)}
+            className={classes.chip}
+            type="button"
+          >
+            {option}
+          </button>
+        ))}
+      </div>
     </div>
   );
 };

@@ -3,20 +3,26 @@ import { FC } from "react";
 // import { BiGitRepoForked } from "react-icons/bi";
 // import { BsEye } from "react-icons/bs";
 import { RepoItem } from "@/types/repos";
-import classes from "../styles.module.scss";
+import classes from "./styles.module.scss";
+import { UserItem } from "@/types/users";
 
 type CardProps = {
-  item: RepoItem;
+  item: UserItem;
 };
 
-export const RepoCard: FC<CardProps> = ({ item }) => {
+export const UserCard: FC<CardProps> = ({ item }) => {
   return (
-    <div className={classes.cardList}>
-      <article className={classes.card}>
-        <p>{item.description}</p>
-        <div className={classes.cardHeader}>
-          <a href="#">{item.name}</a>
-          <button className={classes.iconButton}>
+    <div className="card-list">
+      <article className="card">
+        <figure className="card-image">
+          <img
+            src="https://images.unsplash.com/photo-1494253109108-2e30c049369b?crop=entropy&cs=srgb&fm=jpg&ixid=MnwxNDU4OXwwfDF8cmFuZG9tfHx8fHx8fHx8MTYyNDcwMTUwOQ&ixlib=rb-1.2.1&q=85"
+            alt="An orange painted blue, cut in half laying on a blue background"
+          />
+        </figure>
+        <div className="card-header">
+          <a href="#">When life gives you oranges</a>
+          <button className="icon-button">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               width="24"
@@ -34,8 +40,8 @@ export const RepoCard: FC<CardProps> = ({ item }) => {
             </svg>
           </button>
         </div>
-        <div className={classes.cardFooter}>
-          <div className={classes.cardMeta}>
+        <div className="card-footer">
+          <div className="card-meta card-meta--views">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               width="24"
@@ -54,7 +60,7 @@ export const RepoCard: FC<CardProps> = ({ item }) => {
             </svg>
             2,465
           </div>
-          <div className={classes.cardMeta}>
+          <div className="card-meta card-meta--date">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               width="24"
