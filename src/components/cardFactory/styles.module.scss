@@ -6,13 +6,13 @@ img {
 .repoCard {
   //   width: 90%;
   height: 300px;
-  width: 400px;
+  //   width: 400px;
   cursor: pointer;
 }
 
 .userCard {
   height: 400px;
-  width: 400px;
+  //   width: 400px;
   cursor: pointer;
 }
 .name {
@@ -21,9 +21,15 @@ img {
   max-width: 80%;
   overflow: auto;
 }
+.userName {
+  text-overflow: ellipsis;
+  font-weight: bolder;
+  max-width: 80%;
+  overflow: auto;
+}
 .card {
   height: 75%;
-  width: 100%;
+  //   width: 100%;
   background-color: #fff;
   text-decoration: none;
   box-shadow:
