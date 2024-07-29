@@ -4,8 +4,8 @@ import { Repos } from "@/types/repos";
 import { Users } from "@/types/users";
 
 export const shouldStartListining = (
-  currentState: gitHubSearchState,
-  previousState: gitHubSearchState
+  currentState: gitHubSearchState<Repos | Users>,
+  previousState: gitHubSearchState<Repos | Users>
 ) => {
   return (
     currentState.searchQuery !== previousState.searchQuery ||
@@ -13,18 +13,32 @@ export const shouldStartListining = (
   );
 };
 
-export const isCached = (state: gitHubSearchState) => {
+export const shouldStartIncrementingResults = (
+  currentState: gitHubSearchState<Repos | Users>,
+  previousState: gitHubSearchState<Repos | Users>
+) => {
+  return (
+    currentState.page !== previousState.page &&
+    currentState.filterType === previousState.filterType &&
+    currentState.searchQuery === previousState.searchQuery
+  );
+};
+
+export const isCached = (state: gitHubSearchState<Repos | Users>) => {
   if (state.cachedResults[state.filterType][state.searchQuery]) {
     return true;
   }
   return false;
 };
 
-export const retriveFromCache = (state: gitHubSearchState) => {
+export const retriveFromCache = (state: gitHubSearchState<Repos | Users>) => {
   return state.cachedResults[state.filterType][state.searchQuery];
 };
 
-export const fetchData = async (state: gitHubSearchState, page = 1) => {
+export const fetchData = async (
+  state: gitHubSearchState<Repos | Users>,
+  page = 1
+) => {
   let resp;
   if (state.filterType === "repos") {
     resp = await getRepos(state.searchQuery, { page });
@@ -36,7 +50,7 @@ export const fetchData = async (state: gitHubSearchState, page = 1) => {
 };
 
 export const addAndRemoveFromCache = (
-  state: gitHubSearchState,
+  state: gitHubSearchState<Repos | Users>,
   newData: Repos | Users
 ) => {
   const cacheMaxSize = 10;

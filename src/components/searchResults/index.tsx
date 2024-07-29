@@ -4,7 +4,7 @@ import {
   useSearchResult,
   useLastPageReached,
 } from "@/store/gitHubSearch/gitHubSearch.selectors";
-import { FC, useCallback, useRef } from "react";
+import { FC, MutableRefObject, useCallback, useRef } from "react";
 import { CardFactory } from "../cardFactory";
 import classes from "./styles.module.scss";
 import { useDispatch } from "react-redux";
@@ -17,7 +17,7 @@ const SearchResults: FC = () => {
   const isLoading = useIsLoading();
   const lastPageReached = useLastPageReached();
   const dispatch = useDispatch();
-  const observer = useRef() as any;
+  const observer = useRef() as MutableRefObject<any>;
 
   const lastCardElementRef = useCallback(
     (node: Node) => {

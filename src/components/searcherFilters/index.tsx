@@ -1,15 +1,15 @@
 import { Input } from "@/components/Input";
 import { useDispatch } from "react-redux";
-import { FC, useEffect } from "react";
+import { FC } from "react";
 import { Option, filterType } from "@/types/common";
 import { SelectDropdown } from "@/components/selectDropdown";
 import {
   useCachedResult,
   useFilterType,
   useSearchQuery,
-  useSearchResult,
 } from "@/store/gitHubSearch/gitHubSearch.selectors";
 import {
+  cachedResultsReset,
   filterTypeUpdated,
   searchQueryUpdated,
 } from "@/store/gitHubSearch/gitHubSearch.reducer";
@@ -19,7 +19,6 @@ import Chips from "../chips";
 export const SearchFilters: FC = () => {
   const dispatch = useDispatch();
   const searchQuery = useSearchQuery();
-  const searcResult = useSearchResult();
   const cachedData = useCachedResult();
   const filterType = useFilterType();
   const options: Option[] = [
@@ -47,8 +46,14 @@ export const SearchFilters: FC = () => {
           onValueChange={(value) =>
             dispatch(filterTypeUpdated(value as filterType))
           }
-          defaultValue="repos"
+          defaultValue={filterType}
         />
+        <button
+          className={classes.resetButton}
+          onClick={() => dispatch(cachedResultsReset())}
+        >
+          reset history
+        </button>
       </div>
       <div>
         <Chips

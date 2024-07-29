@@ -8,7 +8,6 @@ export const CardLoader: React.FC<{
   height: string;
 }> = ({ count, width, height }) => {
   return (
-    // <div style={{ display: "flex" }}>
     <Skeleton
       style={{
         height,
@@ -23,6 +22,5 @@ export const CardLoader: React.FC<{
       containerClassName={classes.cardLoader}
       count={count}
     />
-    // </div>
   );
 };

@@ -18,10 +18,7 @@ export const UserCard: FC<CardProps> = ({ item }) => {
     >
       <div className={classes.card}>
         <div className={classes.cardImage}>
-          <img
-            src={item.avatar_url}
-            alt="An orange painted blue, cut in half laying on a blue background"
-          />
+          <img src={item.avatar_url} alt="user avatar" />
         </div>
         <div className={classes.cardHeader}>
           <h3 className={classes.name}>{item.login}</h3>

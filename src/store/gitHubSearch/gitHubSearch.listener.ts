@@ -6,11 +6,13 @@ import {
   resetSearchResult,
   isLoadingUpdated,
   lastPageReached,
+  resetPage,
 } from "./gitHubSearch.reducer";
 import {
   fetchData,
   isCached,
   retriveFromCache,
+  shouldStartIncrementingResults,
   shouldStartListining,
 } from "./gitHubSearch.utils";
 
@@ -33,6 +35,7 @@ export const listenToGitHubSearch = () => {
         let data;
         if (isCached(gitHubSearchState)) {
           data = retriveFromCache(gitHubSearchState);
+          listenerApi.dispatch(resetPage());
         } else {
           listenerApi.dispatch(isLoadingUpdated(true));
           data = await fetchData(gitHubSearchState);
@@ -49,10 +52,9 @@ export const listenToGitHubSearch = () => {
 export const listenToGitHubSearchPageChange = () => {
   listenerMiddleware.startListening.withTypes<RootState, AppDispatch>()({
     predicate: (_action, currentState, previousState) => {
-      return (
-        currentState.gitHubSearch.page !== previousState.gitHubSearch.page &&
-        currentState.gitHubSearch.filterType ===
-          previousState.gitHubSearch.filterType
+      return shouldStartIncrementingResults(
+        currentState.gitHubSearch,
+        previousState.gitHubSearch
       );
     },
     effect: async (_action, listenerApi) => {

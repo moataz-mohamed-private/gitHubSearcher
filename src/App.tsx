@@ -5,14 +5,10 @@ import {
   Routes,
   Navigate,
 } from "react-router-dom";
-// import { persistStore } from "redux-persist";
 import { PersistGate } from "redux-persist/integration/react";
-// import { List } from "./pages/github/list";
-// import { store } from "./store";
 import { persistor, store } from "./store";
 import { Provider } from "react-redux";
 import { HomePage } from "./pages/home/home";
-import { SelectDropdown } from "./components/selectDropdown";
 
 const routes = [{ path: "/home", element: <HomePage />, exact: true }];
 

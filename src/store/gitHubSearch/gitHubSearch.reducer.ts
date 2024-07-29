@@ -5,10 +5,10 @@ import { Users } from "@/types/users";
 import { filterType } from "@/types/common";
 import { addAndRemoveFromCache } from "./gitHubSearch.utils";
 
-export interface gitHubSearchState {
+export interface gitHubSearchState<T> {
   searchQuery: string;
   isLoading: boolean;
-  searchResult: Repos | Users;
+  searchResult: T;
   page: number;
   lastPageReached: boolean;
   filterType: filterType;
@@ -18,7 +18,7 @@ export interface gitHubSearchState {
   };
 }
 
-const initialState: gitHubSearchState = {
+const initialState: gitHubSearchState<Repos | Users> = {
   searchQuery: "",
   isLoading: false,
   page: 1,
@@ -37,10 +37,14 @@ export const gitHubSearchSlice = createSlice({
   reducers: {
     searchQueryUpdated: (state, action: PayloadAction<string>) => {
       state.searchQuery = action.payload;
+      state.page = 1;
     },
     filterTypeUpdated: (state, action: PayloadAction<filterType>) => {
       state.filterType = action.payload;
       state.page = 1;
+      (state.searchQuery =
+        state.searchQuery.length >= 3 ? "" : state.searchQuery),
+        (state.lastPageReached = false);
     },
     searchReset: (state) => {
       state.searchQuery = "";
@@ -48,12 +52,19 @@ export const gitHubSearchSlice = createSlice({
     resetSearchResult: (state) => {
       state.searchResult = {} as Repos | Users;
     },
+    resetPage: (state) => {
+      state.page = 1;
+    },
+    cachedResultsReset: (state) => {
+      state.cachedResults = { repos: {}, users: {} };
+    },
     searchResultUpdated: (state, action: PayloadAction<Repos | Users>) => {
       state.searchResult = action.payload;
     },
     pageUpdated: (state) => {
       state.page = state.page + 1;
     },
+
     lastPageReached: (state) => {
       state.lastPageReached = true;
     },
@@ -62,6 +73,7 @@ export const gitHubSearchSlice = createSlice({
     },
     cachedDataUpdated: (state, action: PayloadAction<Repos | Users>) => {
       state.cachedResults = addAndRemoveFromCache(state, action.payload);
+      state.page = 1;
     },
   },
 });
@@ -74,8 +86,10 @@ export const {
   searchReset,
   cachedDataUpdated,
   resetSearchResult,
+  resetPage,
   pageUpdated,
   lastPageReached,
+  cachedResultsReset,
 } = gitHubSearchSlice.actions;
 
 export const gitHubSearchSliceReducer = gitHubSearchSlice.reducer;

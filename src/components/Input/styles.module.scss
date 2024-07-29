@@ -12,7 +12,9 @@
     border: 1.5px solid var(--black-a7);
   }
   &:focus {
-    border: 2px solid black;
+    box-shadow:
+      0 0 0 2px #16c79a,
+      0 10px 60px 0 rgba(#000, 0.1);
     outline: none;
   }
 }
