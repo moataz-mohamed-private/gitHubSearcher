@@ -17,6 +17,7 @@ const Chips: FC<ChipsProps> = ({ options, onClick, placeholder }) => {
             onClick={() => onClick(option)}
             className={classes.chip}
             type="button"
+            key={option}
           >
             {option}
           </button>

@@ -9,6 +9,8 @@ export interface gitHubSearchState {
   searchQuery: string;
   isLoading: boolean;
   searchResult: Repos | Users;
+  page: number;
+  lastPageReached: boolean;
   filterType: filterType;
   cachedResults: {
     repos: { [key: string]: Repos };
@@ -19,6 +21,8 @@ export interface gitHubSearchState {
 const initialState: gitHubSearchState = {
   searchQuery: "",
   isLoading: false,
+  page: 1,
+  lastPageReached: false,
   searchResult: {} as Repos | Users,
   filterType: "repos",
   cachedResults: {
@@ -36,6 +40,7 @@ export const gitHubSearchSlice = createSlice({
     },
     filterTypeUpdated: (state, action: PayloadAction<filterType>) => {
       state.filterType = action.payload;
+      state.page = 1;
     },
     searchReset: (state) => {
       state.searchQuery = "";
@@ -45,6 +50,12 @@ export const gitHubSearchSlice = createSlice({
     },
     searchResultUpdated: (state, action: PayloadAction<Repos | Users>) => {
       state.searchResult = action.payload;
+    },
+    pageUpdated: (state) => {
+      state.page = state.page + 1;
+    },
+    lastPageReached: (state) => {
+      state.lastPageReached = true;
     },
     isLoadingUpdated: (state, action: PayloadAction<boolean>) => {
       state.isLoading = action.payload;
@@ -63,6 +74,8 @@ export const {
   searchReset,
   cachedDataUpdated,
   resetSearchResult,
+  pageUpdated,
+  lastPageReached,
 } = gitHubSearchSlice.actions;
 
 export const gitHubSearchSliceReducer = gitHubSearchSlice.reducer;

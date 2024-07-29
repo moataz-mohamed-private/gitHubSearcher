@@ -10,3 +10,5 @@ export const useCachedResult = () =>
   useAppSelector((state) => state.gitHubSearch.cachedResults);
 export const useIsLoading = () =>
   useAppSelector((state) => state.gitHubSearch.isLoading);
+export const useLastPageReached = () =>
+  useAppSelector((state) => state.gitHubSearch.lastPageReached);

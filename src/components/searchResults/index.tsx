@@ -1,50 +1,32 @@
 import {
   useFilterType,
   useIsLoading,
-  useSearchQuery,
   useSearchResult,
+  useLastPageReached,
 } from "@/store/gitHubSearch/gitHubSearch.selectors";
-import { FC, useCallback, useEffect, useRef, useState } from "react";
+import { FC, useCallback, useRef } from "react";
 import { CardFactory } from "../cardFactory";
 import classes from "./styles.module.scss";
-import { getRepos } from "@/api/githubApi";
 import { useDispatch } from "react-redux";
-import { searchResultUpdated } from "@/store/gitHubSearch/gitHubSearch.reducer";
+import { pageUpdated } from "@/store/gitHubSearch/gitHubSearch.reducer";
+import { CardLoader } from "../cardLoader";
 
 const SearchResults: FC = () => {
-  const [page, setPage] = useState(1);
   const searchResults = useSearchResult();
-  const searchQuery = useSearchQuery();
   const filterType = useFilterType();
   const isLoading = useIsLoading();
+  const lastPageReached = useLastPageReached();
   const dispatch = useDispatch();
   const observer = useRef() as any;
 
-  useEffect(() => {
-    const getResultsUpdateState = async () => {
-      let data;
-      if (filterType === "repos") {
-        data = await getRepos(searchQuery, { page });
-      } else data = await getRepos(searchQuery, { page });
-
-      dispatch(
-        searchResultUpdated({
-          ...searchResults,
-          items: [...searchResults.items, ...data.data.items] as any,
-        })
-      );
-    };
-    getResultsUpdateState();
-  }, [page]);
-
-  const lastPostElementRef = useCallback(
+  const lastCardElementRef = useCallback(
     (node: Node) => {
-      if (isLoading) return;
+      if (isLoading || lastPageReached) return;
       if (observer.current) observer.current.disconnect();
 
       observer.current = new IntersectionObserver((entries) => {
         if (entries[0].isIntersecting) {
-          setPage((prevPage) => prevPage + 1); // trigger loading of new posts by chaging page no
+          if (!isLoading) dispatch(pageUpdated());
         }
       });
 
@@ -54,16 +36,20 @@ const SearchResults: FC = () => {
   ) as any;
 
   return (
-    <div className={classes.CardsGrid}>
-      {searchResults?.items?.map((item, i) => (
-        <div
-          ref={
-            searchResults?.items?.length === i + 1 ? lastPostElementRef : null
-          }
-        >
-          <CardFactory type={filterType} item={item} />
-        </div>
-      ))}
+    <div>
+      <div className={classes.CardsGrid}>
+        {searchResults?.items?.map((item, i) => (
+          <div
+            ref={
+              searchResults?.items?.length === i + 1 ? lastCardElementRef : null
+            }
+            key={item.id}
+          >
+            <CardFactory type={filterType} item={item} />
+          </div>
+        ))}
+      </div>
+      {isLoading && <CardLoader count={40} width="400px" height="300px" />}
     </div>
   );
 };

@@ -24,13 +24,13 @@ export const retriveFromCache = (state: gitHubSearchState) => {
   return state.cachedResults[state.filterType][state.searchQuery];
 };
 
-export const fetchData = async (state: gitHubSearchState) => {
+export const fetchData = async (state: gitHubSearchState, page = 1) => {
   let resp;
   if (state.filterType === "repos") {
-    resp = await getRepos(state.searchQuery);
+    resp = await getRepos(state.searchQuery, { page });
     return resp.data;
   } else if (state.filterType === "users") {
-    resp = await getUsers(state.searchQuery);
+    resp = await getUsers(state.searchQuery, { page });
     return resp.data;
   }
 };
