@@ -38,6 +38,7 @@ export const gitHubSearchSlice = createSlice({
     searchQueryUpdated: (state, action: PayloadAction<string>) => {
       state.searchQuery = action.payload;
       state.page = 1;
+      state.lastPageReached = false;
     },
     filterTypeUpdated: (state, action: PayloadAction<filterType>) => {
       state.filterType = action.payload;
@@ -54,6 +55,7 @@ export const gitHubSearchSlice = createSlice({
     },
     resetPage: (state) => {
       state.page = 1;
+      state.lastPageReached = false;
     },
     cachedResultsReset: (state) => {
       state.cachedResults = { repos: {}, users: {} };
