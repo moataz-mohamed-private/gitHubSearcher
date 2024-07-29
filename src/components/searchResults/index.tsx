@@ -43,7 +43,7 @@ const SearchResults: FC = () => {
             ref={
               searchResults?.items?.length === i + 1 ? lastCardElementRef : null
             }
-            key={item.id}
+            key={item.id * i}
           >
             <CardFactory type={filterType} item={item} />
           </div>
